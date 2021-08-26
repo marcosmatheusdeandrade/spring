@@ -1,1 +1,1 @@
-# spring-starter
+Projeto para estudos e experimentos com spring boot
