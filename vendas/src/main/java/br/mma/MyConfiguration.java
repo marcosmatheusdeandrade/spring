@@ -5,8 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-@Configuration
-@Profile("development") // somente será executada no profile development
+@Development
 public class MyConfiguration {
 
 	public static final String BEAN_APPLICATION_NAME = "applicationName";
