@@ -2,6 +2,7 @@ package br.mma;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,9 @@ public class SalesApplication {
 	@Autowired
 	@Qualifier(MyConfiguration.BEAN_APPLICATION_NAME)
 	private String applicationName;
+	
+	@Value("${application.name}")
+	private String applicationNameOfProperties;
 	
 	@GetMapping("/hello")
 	public String helloWorld() {
