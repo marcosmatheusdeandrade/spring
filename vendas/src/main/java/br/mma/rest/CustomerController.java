@@ -5,8 +5,8 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,41 +14,37 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import br.mma.eao.CustomerEAOJpaRepository;
 import br.mma.entities.Customer;
 
-@Controller
+@RestController
 @RequestMapping("/api/customer")
 public class CustomerController {
 
 	private CustomerEAOJpaRepository customerEAO;
 	
-	@ResponseBody
+	private static final ResponseStatusException RESPONSE_STATUS_NOT_FOUND = new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado");
+	
 	@PostMapping
-	public ResponseEntity save(@RequestBody Customer customer) {
-		
-		Customer customerDB = customerEAO.save(customer);
-		return ResponseEntity.ok(customer);
+	@ResponseStatus(HttpStatus.CREATED)
+	public Customer save(@RequestBody Customer customer) {
+		return customerEAO.save(customer);
 	}
 	
-	@ResponseBody
 	@GetMapping("/{id}")
-	public ResponseEntity findById(@PathVariable("id") Integer id) {
+	public Customer findById(@PathVariable("id") Integer id) {
 		
-		Optional<Customer> optCustomer = customerEAO.findById(id);
+		return customerEAO.findById(id)
+						  .orElseThrow(() -> RESPONSE_STATUS_NOT_FOUND);
 		
-		if (optCustomer.isPresent()) {
-			return ResponseEntity.ok(optCustomer.get());
-		}
-		
-		return ResponseEntity.notFound().build();
 	}
 	
-	@ResponseBody
 	@GetMapping
-	public ResponseEntity find(Customer customerFilter) {
+	public List<Customer> find(Customer customerFilter) {
 		
 		ExampleMatcher matcher = ExampleMatcher
 									.matching()
@@ -57,36 +53,32 @@ public class CustomerController {
 		
 		Example<Customer> example = Example.of(customerFilter, matcher);
 		
-		List<Customer> customers = customerEAO.findAll(example);
-		
-		return ResponseEntity.ok(customers);
+		return customerEAO.findAll(example);
 	}
 	
-	@ResponseBody
 	@PutMapping("/{id}")
-	public ResponseEntity update(@PathVariable Integer id, @RequestBody Customer customer) {
+	public Customer update(@PathVariable Integer id, @RequestBody Customer customer) {
 		
 		return customerEAO.findById(id)
 						  .map(existingCustomer -> {
 			
             customer.setId(existingCustomer.getId());
 			customerEAO.save(customer);
-			return ResponseEntity.noContent().build();
+			return existingCustomer;
 			
-		}).orElseGet(() -> ResponseEntity.notFound().build());
+		}).orElseThrow(() -> RESPONSE_STATUS_NOT_FOUND);
 	}
 	
-	@ResponseBody
 	@DeleteMapping("/{id}")
-	public ResponseEntity delete(@PathVariable("id") Integer id) {
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void delete(@PathVariable("id") Integer id) {
 		
 		Optional<Customer> optCustomer = customerEAO.findById(id);
-		
+				   
 		if (optCustomer.isPresent()) {
 			customerEAO.delete(optCustomer.get());
-			return ResponseEntity.noContent().build();
+		} else {
+			throw RESPONSE_STATUS_NOT_FOUND;
 		}
-		
-		return ResponseEntity.notFound().build();
 	}
 }
