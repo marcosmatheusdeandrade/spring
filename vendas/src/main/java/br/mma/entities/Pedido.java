@@ -24,8 +24,6 @@ public class Pedido {
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
 	
-	private Product product;
-	
 	private LocalDate dataPedido;
 	
 	@Column(name="total", length = 15, precision = 2)
@@ -50,10 +48,6 @@ public class Pedido {
 		this.items = items;
 	}
 
-	public Product getProduct() {
-		return product;
-	}
-
 	public Customer getCustomer() {
 		return customer;
 	}
@@ -76,9 +70,5 @@ public class Pedido {
 
 	public void setTotal(BigDecimal total) {
 		this.total = total;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
 	}
 }
