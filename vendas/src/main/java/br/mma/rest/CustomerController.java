@@ -25,25 +25,17 @@ public class CustomerController {
 
 	private CustomerEAOJpaRepository customerEAO;
 	
-	@PostMapping("/api/customer")
 	@ResponseBody
-	public ResponseEntity update(@RequestBody Customer customer) {
-		
-			customerEAO.save(customer);
-			return ResponseEntity.ok(customer);
-	}
-	
-	@ResponseBody
-	@PostMapping("/api/customer")
-	public ResponseEntity getCustomerById(@RequestBody Customer customer) {
+	@PostMapping
+	public ResponseEntity save(@RequestBody Customer customer) {
 		
 		Customer customerDB = customerEAO.save(customer);
 		return ResponseEntity.ok(customer);
 	}
 	
 	@ResponseBody
-	@GetMapping("/api/customer/{id}")
-	public ResponseEntity findCustomerById(@PathVariable("id") Integer id) {
+	@GetMapping("/{id}")
+	public ResponseEntity findById(@PathVariable("id") Integer id) {
 		
 		Optional<Customer> optCustomer = customerEAO.findById(id);
 		
@@ -55,7 +47,7 @@ public class CustomerController {
 	}
 	
 	@ResponseBody
-	@GetMapping("/api/customer")
+	@GetMapping
 	public ResponseEntity find(Customer customerFilter) {
 		
 		ExampleMatcher matcher = ExampleMatcher
@@ -70,8 +62,8 @@ public class CustomerController {
 		return ResponseEntity.ok(customers);
 	}
 	
-	@PutMapping("/api/customer/{id}")
 	@ResponseBody
+	@PutMapping("/{id}")
 	public ResponseEntity update(@PathVariable Integer id, @RequestBody Customer customer) {
 		
 		return customerEAO.findById(id)
@@ -85,7 +77,7 @@ public class CustomerController {
 	}
 	
 	@ResponseBody
-	@DeleteMapping("/api/customer/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity delete(@PathVariable("id") Integer id) {
 		
 		Optional<Customer> optCustomer = customerEAO.findById(id);
