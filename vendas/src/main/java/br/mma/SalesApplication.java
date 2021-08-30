@@ -1,7 +1,5 @@
 package br.mma;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,8 +10,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.mma.eao.CustomerEAOJdbcTemplate;
-import br.mma.model.Customer;
+import br.mma.eao.CustomerEAOJpaRepository;
+import br.mma.entities.Customer;
 
 @SpringBootApplication
 @RestController
@@ -27,13 +25,16 @@ public class SalesApplication {
 	private String applicationNameOfProperties;
 	
 	@Bean
-	public CommandLineRunner init(@Autowired CustomerEAOJdbcTemplate eao) {
+	public CommandLineRunner init(@Autowired CustomerEAOJpaRepository eao) {
 		return args -> {
-			eao.save(new Customer("Cliente teste"));
+			Customer customer = new Customer("Cliente teste");
+			eao.save(customer);
 			eao.save(new Customer("Cliente teste 2"));
 			
-			List<Customer> customers = eao.findAll();
-			customers.forEach(System.out::println);
+			eao.findAll().forEach(System.out::println);
+			
+			System.out.println("buscando por nome");
+			eao.findByNameLike(customer.getName()).forEach(System.out::println);
 		};
 	}
 	

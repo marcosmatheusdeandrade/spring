@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import br.mma.model.Customer;
+import br.mma.entities.Customer;
 
 @Repository
 public class CustomerEAOJdbcTemplate {

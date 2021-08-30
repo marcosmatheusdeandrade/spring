@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.mma.model.Customer;
+import br.mma.entities.Customer;
 
 @Repository
 public class CustomerEAO {
