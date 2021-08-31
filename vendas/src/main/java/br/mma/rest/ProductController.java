@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,57 +17,57 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.mma.eao.CustomerEAOJpaRepository;
-import br.mma.entities.Customer;
+import br.mma.eao.ProductEAO;
+import br.mma.entities.Product;
 
 @RestController
-@RequestMapping("/api/customer")
-public class CustomerController {
+@RequestMapping("/api/product")
+public class ProductController {
 
-	private CustomerEAOJpaRepository customerEAO;
+	private ProductEAO productEAO;
 	
-	private static final ResponseStatusException RESPONSE_STATUS_NOT_FOUND = new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado");
+	private static final ResponseStatusException RESPONSE_STATUS_NOT_FOUND = new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado");
 	
-	public CustomerController(CustomerEAOJpaRepository customerEAO) {
-		this.customerEAO = customerEAO;
+	public ProductController(ProductEAO productEAO) {
+		this.productEAO = productEAO;
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Customer save(@RequestBody Customer customer) {
-		return customerEAO.save(customer);
+	public Product save(@RequestBody Product product) {
+		return productEAO.save(product);
 	}
 	
 	@GetMapping("/{id}")
-	public Customer findById(@PathVariable("id") Integer id) {
+	public Product findById(@PathVariable("id") Integer id) {
 		
-		return customerEAO.findById(id)
+		return productEAO.findById(id)
 						  .orElseThrow(() -> RESPONSE_STATUS_NOT_FOUND);
 		
 	}
 	
 	@GetMapping
-	public List<Customer> find(Customer customerFilter) {
+	public List<Product> find(Product productFilter) {
 		
 		ExampleMatcher matcher = ExampleMatcher
 									.matching()
 									.withIgnoreCase()
 									.withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 		
-		Example<Customer> example = Example.of(customerFilter, matcher);
+		Example<Product> example = Example.of(productFilter, matcher);
 		
-		return customerEAO.findAll(example);
+		return productEAO.findAll(example);
 	}
 	
 	@PutMapping("/{id}")
-	public Customer update(@PathVariable Integer id, @RequestBody Customer customer) {
+	public Product update(@PathVariable Integer id, @RequestBody Product product) {
 		
-		return customerEAO.findById(id)
-						  .map(existingCustomer -> {
+		return productEAO.findById(id)
+						  .map(existingProduct -> {
 			
-            customer.setId(existingCustomer.getId());
-			customerEAO.save(customer);
-			return existingCustomer;
+            product.setId(existingProduct.getId());
+			productEAO.save(product);
+			return existingProduct;
 			
 		}).orElseThrow(() -> RESPONSE_STATUS_NOT_FOUND);
 	}
@@ -77,10 +76,10 @@ public class CustomerController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable("id") Integer id) {
 		
-		Optional<Customer> optCustomer = customerEAO.findById(id);
+		Optional<Product> optProduct = productEAO.findById(id);
 				   
-		if (optCustomer.isPresent()) {
-			customerEAO.delete(optCustomer.get());
+		if (optProduct.isPresent()) {
+			productEAO.delete(optProduct.get());
 		} else {
 			throw RESPONSE_STATUS_NOT_FOUND;
 		}

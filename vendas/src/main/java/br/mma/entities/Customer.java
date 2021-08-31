@@ -8,7 +8,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
+@Getter
+@Setter
 public class Customer {
 
 	@Id
@@ -24,30 +29,6 @@ public class Customer {
 	}
 	
 	public Customer(String name) {
-		this.name = name;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public Set<Pedido> getPedidos() {
-		return pedidos;
-	}
-
-	public void setPedidos(Set<Pedido> pedidos) {
-		this.pedidos = pedidos;
-	}
-
-	public void setName(String name) {
 		this.name = name;
 	}
 }

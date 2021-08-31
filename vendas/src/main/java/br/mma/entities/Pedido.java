@@ -13,7 +13,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
+@Getter
+@Setter
 public class Pedido {
 
 	@Id
@@ -31,44 +36,4 @@ public class Pedido {
 	
 	@OneToMany(mappedBy = "pedido")
 	private List<ItemPedido> items;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public List<ItemPedido> getItems() {
-		return items;
-	}
-
-	public void setItems(List<ItemPedido> items) {
-		this.items = items;
-	}
-
-	public Customer getCustomer() {
-		return customer;
-	}
-
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
-
-	public LocalDate getDataPedido() {
-		return dataPedido;
-	}
-
-	public void setDataPedido(LocalDate dataPedido) {
-		this.dataPedido = dataPedido;
-	}
-
-	public BigDecimal getTotal() {
-		return total;
-	}
-
-	public void setTotal(BigDecimal total) {
-		this.total = total;
-	}
 }
