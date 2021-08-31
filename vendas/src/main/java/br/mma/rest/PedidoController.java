@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import br.mma.entities.Pedido;
 import br.mma.rest.dto.PedidoDTO;
@@ -17,8 +16,6 @@ import br.mma.service.PedidoService;
 public class PedidoController {
 
 	private PedidoService pedidoService;
-	
-	private static final ResponseStatusException RESPONSE_STATUS_NOT_FOUND = new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado");
 	
 	public PedidoController(PedidoService pedidoService) {
 		this.pedidoService = pedidoService;

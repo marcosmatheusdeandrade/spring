@@ -15,6 +15,7 @@ import br.mma.entities.Customer;
 import br.mma.entities.ItemPedido;
 import br.mma.entities.Pedido;
 import br.mma.entities.Product;
+import br.mma.exception.SalesException;
 import br.mma.rest.dto.ItemPedidoDTO;
 import br.mma.rest.dto.PedidoDTO;
 import br.mma.service.PedidoService;
@@ -37,7 +38,7 @@ public class PedidoServiceImpl implements PedidoService {
 		
 		Customer customer = customerEAO
 							  .findById(customerId)
-							  .orElseThrow(() -> new RuntimeException("Código de cliente inválido"));
+							  .orElseThrow(() -> new SalesException("Código de cliente inválido"));
 		
 		Pedido pedido = new Pedido();
 		pedido.setTotal(pedidoDTO.getTotal());
@@ -62,7 +63,7 @@ public class PedidoServiceImpl implements PedidoService {
 			
 			Product product = productEAO
 								.findById(dto.getProductId())
-								.orElseThrow(() -> new RuntimeException("Id de Produto inválido"));
+								.orElseThrow(() -> new SalesException("Id de Produto inválido"));
 			
 			ItemPedido itemPedido = new ItemPedido();
 			itemPedido.setQuantidade(dto.getQuantidade());
