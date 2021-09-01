@@ -8,6 +8,5 @@ import lombok.Setter;
 public class ItemPedidoDTO {
 
 	private Integer productId;
-
-	private Integer quantidade;
+	private Integer quantity;
 }

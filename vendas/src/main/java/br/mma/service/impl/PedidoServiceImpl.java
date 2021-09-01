@@ -2,6 +2,7 @@ package br.mma.service.impl;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -53,6 +54,11 @@ public class PedidoServiceImpl implements PedidoService {
 		return pedido;
 	}
 	
+	@Override
+	public Optional<Pedido> getPedidoCompleto(Integer id) {
+		return pedidoEAO.findFetchItemsById(id);
+	}
+	
 	private List<ItemPedido> converterItems(Pedido pedido, List<ItemPedidoDTO> items) {
 		
 		if (items.isEmpty()) {
@@ -66,7 +72,7 @@ public class PedidoServiceImpl implements PedidoService {
 								.orElseThrow(() -> new SalesException("Id de Produto inválido"));
 			
 			ItemPedido itemPedido = new ItemPedido();
-			itemPedido.setQuantidade(dto.getQuantidade());
+			itemPedido.setQuantity(dto.getQuantity());
 			itemPedido.setPedido(pedido);
 			itemPedido.setProduct(product);
 			

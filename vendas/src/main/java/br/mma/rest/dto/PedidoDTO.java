@@ -11,8 +11,6 @@ import lombok.Setter;
 public class PedidoDTO {
 
 	private Integer customerId;
-	
 	private BigDecimal total;
-	
 	private List<ItemPedidoDTO> items;
 }
