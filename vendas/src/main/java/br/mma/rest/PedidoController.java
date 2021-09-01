@@ -3,6 +3,8 @@ package br.mma.rest;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -32,7 +34,7 @@ public class PedidoController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Integer save(@RequestBody PedidoDTO pedidoDTO) {
+	public Integer save(@RequestBody @Valid PedidoDTO pedidoDTO) {
 		Pedido pedido = pedidoService.save(pedidoDTO);
 		return pedido.getId();
 	}
