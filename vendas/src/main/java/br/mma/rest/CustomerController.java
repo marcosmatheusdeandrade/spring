@@ -3,6 +3,8 @@ package br.mma.rest;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
@@ -34,7 +36,7 @@ public class CustomerController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Customer save(@RequestBody Customer customer) {
+	public Customer save(@RequestBody @Valid Customer customer) {
 		return customerEAO.save(customer);
 	}
 	
