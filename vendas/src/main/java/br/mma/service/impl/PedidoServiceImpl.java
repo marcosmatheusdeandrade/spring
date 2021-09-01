@@ -16,6 +16,8 @@ import br.mma.entities.Customer;
 import br.mma.entities.ItemPedido;
 import br.mma.entities.Pedido;
 import br.mma.entities.Product;
+import br.mma.enums.StatusPedido;
+import br.mma.exception.PedidoNotFoundException;
 import br.mma.exception.SalesException;
 import br.mma.rest.dto.ItemPedidoDTO;
 import br.mma.rest.dto.PedidoDTO;
@@ -45,6 +47,7 @@ public class PedidoServiceImpl implements PedidoService {
 		pedido.setTotal(pedidoDTO.getTotal());
 		pedido.setDataPedido(LocalDate.now());
 		pedido.setCustomer(customer);
+		pedido.setStatus(StatusPedido.REALIZADO);
 		
 		List<ItemPedido> itemsPedido = converterItems(pedido, pedidoDTO.getItems());
 		
@@ -52,6 +55,19 @@ public class PedidoServiceImpl implements PedidoService {
 		itemPedidoEAO.saveAll(itemsPedido);
 		
 		return pedido;
+	}
+
+	@Override
+	@Transactional
+	public void updateStatus(Integer id, StatusPedido statusPedido) {
+
+		pedidoEAO.findById(id)
+				 .map(pedido -> {
+			
+			pedido.setStatus(statusPedido);
+			return pedidoEAO.save(pedido);
+			
+		}).orElseThrow(() -> new PedidoNotFoundException());
 	}
 	
 	@Override
