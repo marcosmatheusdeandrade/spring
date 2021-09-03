@@ -14,7 +14,7 @@ import br.mma.eao.UserEAO;
 public class UserServiceImpl implements UserDetailsService {
 
 	@Autowired
-	private PasswordEncoder Encoder;
+	private PasswordEncoder encoder;
 	
 	@Autowired
 	private UserEAO userEAO;
@@ -23,10 +23,22 @@ public class UserServiceImpl implements UserDetailsService {
 		return userEAO.save(user);
 	}
 	
+	public UserDetails autenticar(br.mma.entities.User user) {
+		UserDetails userDetails = loadUserByUsername(user.getLogin());
+		
+		boolean correctPassword = encoder.matches(user.getPassword(), userDetails.getPassword());
+		
+		if (correctPassword) {
+			return userDetails;
+		}
+		
+		throw new RuntimeException("Senha inválida");
+	}
+	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		br.mma.entities.User user = userEAO.findByLogin(username)
-											.orElseThrow(() -> new RuntimeException());
+											.orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
 		
 		String [] roles = user.isAdmin() ? 
 							new String[] {"ADMIN", "USER"} : 
